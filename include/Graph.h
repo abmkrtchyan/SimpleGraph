@@ -11,8 +11,8 @@ template<class T=char, class L=int>
 class Graph {
 private:
     std::unordered_map<T, Node<T> *> allNodes;
-    std::unordered_map<Node<T> *, std::unordered_set<Edge<T, L>>> in_edges;
-    std::unordered_map<Node<T> *, std::unordered_set<Edge<T, L>>> out_edges;
+    std::unordered_map<Node<T> *, std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>> in_edges;
+    std::unordered_map<Node<T> *, std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>> out_edges;
 
     Node<T> *getNode(const T &data) const {
         auto nodeIter = allNodes.find(data);
@@ -27,8 +27,8 @@ public:
         if (allNodes.find(v) == allNodes.end()) {
             auto node = new Node<T>(v);
             allNodes[v] = node;
-            out_edges[node] = std::unordered_set<Edge<T, L>>();
-            in_edges[node] = std::unordered_set<Edge<T, L>>();
+            out_edges[node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
+            in_edges[node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
             return true;
         }
         return false;
