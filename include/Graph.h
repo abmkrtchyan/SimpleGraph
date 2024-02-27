@@ -93,6 +93,9 @@ public:
     }
 
     void dfs() {
+        for (auto &node: this->allNodes) {
+            node.second->reset();
+        }
         std::size_t time = 0;
         for (auto &node: this->allNodes) {
             if (node.second->getColor() == WHITE) {

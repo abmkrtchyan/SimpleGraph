@@ -48,6 +48,12 @@ public:
         this->finishTime = finish;
     }
 
+    void reset() {
+        this->color = WHITE;
+        this->startTime = 0;
+        this->finishTime = INT_MAX;
+    }
+
     bool operator==(const Node &other) const {
         return value == other.value;
     }
