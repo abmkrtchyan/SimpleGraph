@@ -11,8 +11,8 @@ template<class T=char, class L=int>
 class Graph {
 private:
     std::unordered_map<T, Node<T> *> allNodes;
-    std::unordered_map<Node<T> *, std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>> in_edges;
-    std::unordered_map<Node<T> *, std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>> out_edges;
+    std::unordered_map<Node<T>, std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>, typename Node<T>::HashFunction> inEdges;
+    std::unordered_map<Node<T>, std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>, typename Node<T>::HashFunction> outEdges;
 
     Node<T> *getNode(const T &data) const {
         auto nodeIter = allNodes.find(data);
@@ -27,8 +27,8 @@ public:
         if (allNodes.find(v) == allNodes.end()) {
             auto node = new Node<T>(v);
             allNodes[v] = node;
-            out_edges[node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
-            in_edges[node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
+            outEdges[*node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
+            inEdges[*node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
             return true;
         }
         return false;
@@ -39,8 +39,8 @@ public:
         auto destNode = getNode(dest);
         if (sourceNode != nullptr && destNode != nullptr) {
             Edge<T, L> edge(sourceNode, destNode, label);
-            in_edges[sourceNode].insert(edge);
-            out_edges[sourceNode].insert(edge);
+            inEdges[*sourceNode].insert(edge);
+            outEdges[*sourceNode].insert(edge);
             return true;
         }
         throw std::runtime_error("Node not found!");
@@ -58,7 +58,7 @@ public:
         std::unordered_set<T> neighbors;
         auto node = getNode(nodeValue);
         if (node != nullptr) {
-            for (const auto &edge: out_edges.find(node)->second) {
+            for (const auto &edge: outEdges.find(*node)->second) {
                 auto neighbor = getNode(edge.getDestination()->getValue());
                 neighbors.insert(neighbor->getValue());
             }
@@ -71,21 +71,21 @@ public:
         if (startNode == nullptr)
             return;
         std::unordered_set<Node<T> *> visited;
-        std::queue<Node<T>> q;
+        std::queue<Node<T>*> q;
 
-        q.push(*startNode);
+        q.push(startNode);
         visited.insert(startNode);
 
         while (!q.empty()) {
             auto current = q.front();
             q.pop();
 
-            std::cout << current.getValue() << " -> ";
+            current->print();
 
-            for (auto neighborValue: getNeighborNodes(current.getValue())) {
+            for (auto neighborValue: getNeighborNodes(current->getValue())) {
                 auto neighbor = getNode(neighborValue);
                 if (visited.find(neighbor) == visited.end()) {
-                    q.push(*neighbor);
+                    q.push(neighbor);
                     visited.insert(neighbor);
                 }
             }
