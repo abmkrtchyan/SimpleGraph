@@ -23,7 +23,7 @@ private:
     }
 
 public:
-    bool addVertex(const T &v) {
+    bool addNode(const T &v) {
         if (getNode(v) == nullptr) {
             auto node = new Node<T>(v);
             allNodes[v] = node;
