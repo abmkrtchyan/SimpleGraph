@@ -47,20 +47,6 @@ public:
     };
 };
 
-namespace std {
-    template<class T, class L>
-    struct hash<Edge < T, L>> {
-    size_t operator()(const Edge <T, L> &edge) const {
-        size_t hashValue = 0;
-        hashValue ^= std::hash<T>()(edge.getSource()->getValue());
-        hashValue ^= std::hash<T>()(edge.getDestination()->getValue()) + 0x9e3779b9 + (hashValue << 6) +
-                     (hashValue >> 2);
-        hashValue ^= std::hash<L>()(edge.getLabel()) + 0x9e3779b9 + (hashValue << 6) + (hashValue >> 2);
-        return hashValue;
-    }
-};
-}
-
 #endif /* EDGE_H */
 
 
