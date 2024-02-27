@@ -91,6 +91,28 @@ public:
             }
         }
     }
+
+    void dfs() {
+        std::size_t time = 0;
+        for (auto &node: this->allNodes) {
+            if (node.second->getColor() == WHITE) {
+                dfsVisit(*node.second, time);
+            }
+        }
+    }
+
+    void dfsVisit(Node<T> &node, std::size_t &time) {
+        node.setStart(time++);
+        node.setColor(GREY);
+        for (const auto &outEdge: outEdges[node]) {
+            auto vertex = outEdge.getDestination();
+            if (vertex->getColor() == WHITE) {
+                dfsVisit(*vertex, time);
+            }
+        }
+        node.setColor(BLACK);
+        node.setFinish(time++);
+    }
 };
 
 
