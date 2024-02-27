@@ -6,6 +6,7 @@ void test1();
 void test2();
 
 int main() {
+
     test1();
 
     test2();
@@ -55,4 +56,9 @@ void test1() {
         std::cout << "Node: " << node << std::endl;
     }
     graph.bfsPrint(1);
+    std::cout << "____________________DFS_______________" << std::endl;
+    graph.dfs();
+    std::cout << "________________DFS_FINISH____________" << std::endl;
+    graph.bfsPrint(1);
+
 }
