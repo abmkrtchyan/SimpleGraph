@@ -24,7 +24,7 @@ private:
 
 public:
     bool addVertex(const T &v) {
-        if (allNodes.find(v) == allNodes.end()) {
+        if (getNode(v) == nullptr) {
             auto node = new Node<T>(v);
             allNodes[v] = node;
             outEdges[*node] = std::unordered_set<Edge<T, L>, typename Edge<T, L>::HashFunction>();
@@ -105,9 +105,9 @@ public:
         node.setStart(time++);
         node.setColor(GREY);
         for (const auto &outEdge: outEdges[node]) {
-            auto vertex = outEdge.getDestination();
-            if (vertex->getColor() == WHITE) {
-                dfsVisit(*vertex, time);
+            auto nextNode = outEdge.getDestination();
+            if (nextNode->getColor() == WHITE) {
+                dfsVisit(*nextNode, time);
             }
         }
         node.setColor(BLACK);
