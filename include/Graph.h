@@ -70,11 +70,11 @@ public:
         auto startNode = getNode(start);
         if (startNode == nullptr)
             return;
-        std::unordered_set<Node<T>> visited;
+        std::unordered_set<Node<T> *> visited;
         std::queue<Node<T>> q;
 
         q.push(*startNode);
-        visited.insert(*startNode);
+        visited.insert(startNode);
 
         while (!q.empty()) {
             auto current = q.front();
@@ -83,9 +83,9 @@ public:
             std::cout << current.getValue() << " -> ";
 
             for (auto neighborValue: getNeighborNodes(current.getValue())) {
-                auto neighbor = *getNode(neighborValue);
+                auto neighbor = getNode(neighborValue);
                 if (visited.find(neighbor) == visited.end()) {
-                    q.push(neighbor);
+                    q.push(*neighbor);
                     visited.insert(neighbor);
                 }
             }
