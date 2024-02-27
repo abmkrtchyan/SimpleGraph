@@ -20,6 +20,12 @@ public:
     bool operator==(const Node &other) const {
         return value == other.value;
     }
+
+    struct HashFunction {
+        size_t operator()(const Node<T> &node) const {
+            return std::hash<T>()(node.getValue());
+        }
+    };
 };
 
 #endif //SIMPLE_GRAPH_NODE_H
