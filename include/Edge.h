@@ -35,6 +35,16 @@ public:
     bool operator==(const Edge &other) const {
         return source == other.source && destination == other.destination && label == other.label;
     }
+
+    struct HashFunction {
+        size_t operator()(const Edge<T, L> &edge) const {
+            size_t hashValue = 0;
+            hashValue ^= std::hash<T>()(edge.getSource()->getValue());
+            hashValue ^= std::hash<T>()(edge.getDestination()->getValue()) + (hashValue << 31);
+            hashValue ^= std::hash<L>()(edge.getLabel()) + (hashValue << 31);
+            return hashValue;
+        }
+    };
 };
 
 namespace std {
