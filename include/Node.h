@@ -22,13 +22,4 @@ public:
     }
 };
 
-namespace std {
-    template<class T>
-    struct hash<Node<T>> {
-        size_t operator()(const Node<T> &node) const {
-            return std::hash<T>()(node.getValue());
-        }
-    };
-}
-
 #endif //SIMPLE_GRAPH_NODE_H
