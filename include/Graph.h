@@ -65,6 +65,44 @@ public:
         }
         return neighbors;
     }
+
+    void dijkstra(const T &nodeValue) {
+        auto node = getNode(nodeValue);
+        if (node != nullptr) {
+            dijkstra(node);
+        }
+    }
+
+    void initializeSingleSource(Node<T> *sourceNode) {
+        for (auto node: allNodes) {
+            node.second->setParent(nullptr);
+            node.second->setDistance(INT_MAX);
+        }
+        sourceNode->setDistance(0);
+    }
+
+    void relax(Edge<T, L> &edge) {
+        if (edge.getDestination()->getDistance() > edge.getSource()->getDistance() + edge.getLabel()) {
+            edge.getDestination()->setDistance(edge.getSource()->getDistance() + edge.getLabel());
+            edge.getDestination()->setParent(edge.getSource());
+        }
+    }
+
+    void dijkstra(Node<T> *sourceNode) {
+        initializeSingleSource(sourceNode);
+        std::priority_queue<Node<T> *, std::vector<Node<T> *>, std::greater<Node<T>*>> pq;
+        for (auto node: allNodes) {
+            pq.push(node.second);
+        }
+
+        while (!pq.empty()) {
+            auto node = pq.top();
+            pq.pop();
+            for (auto edge: out_edges[node]) {
+                relax(edge);
+            }
+        }
+    }
 };
 
 

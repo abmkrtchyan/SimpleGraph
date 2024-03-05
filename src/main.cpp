@@ -5,10 +5,10 @@ void test1();
 
 void test2();
 
-int main() {
-    test1();
+void test3();
 
-    test2();
+int main() {
+    test3();
 
     return 0;
 }
@@ -26,7 +26,7 @@ void test2() {
     graph.addEdge("A", "D", 1);
     graph.addEdge("A", "E", 1);
     std::cout << std::endl;
-    graph.bfsPrint("B");
+    graph.dijkstra("A");
 }
 
 void test1() {
@@ -54,5 +54,27 @@ void test1() {
     for (const auto &node: graph.getAllNodes()) {
         std::cout << "Node: " << node << std::endl;
     }
-    graph.bfsPrint(1);
+}
+
+void test3() {
+    Graph<std::string, int> graph;
+
+    graph.addVertex("A");
+    graph.addVertex("B");
+    graph.addVertex("C");
+    graph.addVertex("D");
+    graph.addVertex("E");
+    graph.addVertex("F");
+
+    graph.addEdge("A", "B", 9);
+    graph.addEdge("A", "E", 1);
+    graph.addEdge("A", "D", 8);
+    graph.addEdge("B", "C", 4);
+    graph.addEdge("D", "C", 3);
+    graph.addEdge("E", "F", 2);
+    graph.addEdge("E", "D", 2);
+    graph.addEdge("F", "B", 3);
+
+    std::cout << "Graph:" << std::endl;
+    graph.dijkstra("A");
 }
