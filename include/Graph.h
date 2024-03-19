@@ -66,32 +66,6 @@ public:
         return neighbors;
     }
 
-    void bfsPrint(const T &start) const {
-        auto startNode = getNode(start);
-        if (startNode == nullptr)
-            return;
-        std::unordered_set<Node<T> *> visited;
-        std::queue<Node<T>*> q;
-
-        q.push(startNode);
-        visited.insert(startNode);
-
-        while (!q.empty()) {
-            auto current = q.front();
-            q.pop();
-
-            current->print();
-
-            for (auto neighborValue: getNeighborNodes(current->getValue())) {
-                auto neighbor = getNode(neighborValue);
-                if (visited.find(neighbor) == visited.end()) {
-                    q.push(neighbor);
-                    visited.insert(neighbor);
-                }
-            }
-        }
-    }
-
     void dfs() {
         for (auto &node: this->allNodes) {
             node.second->reset();

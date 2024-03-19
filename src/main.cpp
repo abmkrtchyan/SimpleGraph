@@ -26,8 +26,6 @@ void test2() {
     graph.addEdge("A", "C", 1);
     graph.addEdge("A", "D", 1);
     graph.addEdge("A", "E", 1);
-    std::cout << std::endl;
-    graph.bfsPrint("B");
 }
 
 void test1() {
@@ -55,10 +53,8 @@ void test1() {
     for (const auto &node: graph.getAllNodes()) {
         std::cout << "Node: " << node << std::endl;
     }
-    graph.bfsPrint(1);
     std::cout << "____________________DFS_______________" << std::endl;
     graph.dfs();
     std::cout << "________________DFS_FINISH____________" << std::endl;
-    graph.bfsPrint(1);
 
 }
