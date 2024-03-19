@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <algorithm>
 #include "Node.h"
 #include "Edge.h"
 
@@ -102,6 +103,23 @@ public:
                 relax(edge);
             }
         }
+    }
+
+
+    std::vector<std::vector<T>> getShortestPaths(const T &nodeValue) {
+        dijkstra(nodeValue);
+        std::vector<std::vector<T>> paths;
+        for(auto nodePair : allNodes) {
+            auto node = nodePair.second;
+            std::vector<T> current;
+            while (node != nullptr) {
+                current.push_back(node->getValue());
+                node = node->getParent();
+            }
+            std::reverse(current.begin(), current.end());
+            paths.push_back(current);
+        }
+        return paths;
     }
 };
 

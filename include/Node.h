@@ -49,6 +49,12 @@ public:
             return std::hash<T>()(node.getValue());
         }
     };
+
+    struct GreaterDistance {
+        bool operator()(const Node<T> &a, const Node<T> &b) const {
+            return a.getDistance() > b.getDistance();
+        }
+    };
 };
 
 #endif //SIMPLE_GRAPH_NODE_H

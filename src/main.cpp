@@ -76,5 +76,10 @@ void test3() {
     graph.addEdge("F", "B", 3);
 
     std::cout << "Graph:" << std::endl;
-    graph.dijkstra("A");
+    for (const auto& path: graph.getShortestPaths("A")) {
+        for (const auto& node: path) {
+            std::cout << node << " -> ";
+        }
+        std::cout << "/" << std::endl;
+    }
 }
