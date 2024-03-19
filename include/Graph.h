@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <queue>
+#include <algorithm>
 #include "Node.h"
 #include "Edge.h"
 
@@ -20,6 +21,18 @@ private:
             return nodeIter->second;
         }
         return nullptr;
+    }
+
+    std::vector<Node<T> *> topologicalSortNodes() {
+        std::vector<Node<T> *> values;
+        values.reserve(allNodes.size());
+        for (auto kv: allNodes) {
+            values.push_back(kv.second);
+        }
+
+        dfs();
+        std::sort(values.begin(), values.end(), [](Node<T> *a, Node<T> *b) { return a->getFinish() < b->getFinish(); });
+        return values;
     }
 
 public:
@@ -89,6 +102,15 @@ public:
         }
         node.setColor(BLACK);
         node.setFinish(time++);
+    }
+
+    std::vector<T> topologicalSort() {
+        std::vector<T> values;
+        values.reserve(allNodes.size());
+        for (auto& node : topologicalSortNodes()) {
+            values.push_back(node->getValue());
+        }
+        return values;
     }
 };
 

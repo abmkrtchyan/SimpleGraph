@@ -26,6 +26,12 @@ void test2() {
     graph.addEdge("A", "C", 1);
     graph.addEdge("A", "D", 1);
     graph.addEdge("A", "E", 1);
+    auto nodes = graph.topologicalSort();
+    std::cout << "Sorted Nodes: ";
+    for (const auto &node: nodes) {
+        std::cout << node << ", ";
+    }
+    std::cout << std::endl << "___________TOPOLOGICAL_SORT_FINISH____________" << std::endl;
 }
 
 void test1() {
@@ -49,12 +55,10 @@ void test1() {
     graph.addEdge(9, 11, 1);
     graph.addEdge(11, 1, 1);
 
-    std::cout << "Graph:" << std::endl;
-    for (const auto &node: graph.getAllNodes()) {
-        std::cout << "Node: " << node << std::endl;
+    auto nodes = graph.topologicalSort();
+    std::cout << "Sorted Nodes: ";
+    for (const auto &node: nodes) {
+        std::cout << node << ", ";
     }
-    std::cout << "____________________DFS_______________" << std::endl;
-    graph.dfs();
-    std::cout << "________________DFS_FINISH____________" << std::endl;
-
+    std::cout << std::endl << "___________TOPOLOGICAL_SORT_FINISH____________" << std::endl;
 }
