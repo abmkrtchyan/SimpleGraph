@@ -5,7 +5,8 @@ void test1();
 
 void test2();
 
-int main() {
+int main()
+{
     test1();
 
     test2();
@@ -13,32 +14,44 @@ int main() {
     return 0;
 }
 
-void test2() {
+void test2()
+{
     Graph<std::string> graph;
-    graph.addVertex("A");
-    graph.addVertex("B");
-    graph.addVertex("C");
-    graph.addVertex("D");
-    graph.addVertex("E");
+    graph.addNode("A");
+    graph.addNode("B");
+    graph.addNode("C");
+    graph.addNode("D");
+    graph.addNode("E");
 
     graph.addEdge("A", "B", 1);
     graph.addEdge("A", "C", 1);
     graph.addEdge("A", "D", 1);
     graph.addEdge("A", "E", 1);
-    std::cout << std::endl;
+
+    std::cout << "Graph:" << std::endl;
+    for (const auto& node : graph.getAllNodes())
+    {
+        std::cout << "\t" << node << " -> ";
+        for (const auto& next : graph.getNextNodes(node))
+        {
+            std::cout << next << ", ";
+        }
+        std::cout << "/" << std::endl;
+    }
     graph.bfsPrint("B");
 }
 
-void test1() {
+void test1()
+{
     Graph<int, int> graph;
 
-    graph.addVertex(1);
-    graph.addVertex(2);
-    graph.addVertex(3);
-    graph.addVertex(4);
-    graph.addVertex(7);
-    graph.addVertex(9);
-    graph.addVertex(11);
+    graph.addNode(1);
+    graph.addNode(2);
+    graph.addNode(3);
+    graph.addNode(4);
+    graph.addNode(7);
+    graph.addNode(9);
+    graph.addNode(11);
 
     graph.addEdge(1, 2, 1);
     graph.addEdge(1, 3, 1);
@@ -51,8 +64,14 @@ void test1() {
     graph.addEdge(11, 1, 1);
 
     std::cout << "Graph:" << std::endl;
-    for (const auto &node: graph.getAllNodes()) {
-        std::cout << "Node: " << node << std::endl;
+    for (const auto& node : graph.getAllNodes())
+    {
+        std::cout << "\t" << node << " -> ";
+        for (const auto& next : graph.getNextNodes(node))
+        {
+            std::cout << next << ", ";
+        }
+        std::cout << "/" << std::endl;
     }
     graph.bfsPrint(1);
 }
