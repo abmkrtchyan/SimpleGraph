@@ -2,6 +2,7 @@
 #define SIMPLE_GRAPH_NODE_H
 
 #include <climits>
+#include <iostream>
 
 enum Color
 {

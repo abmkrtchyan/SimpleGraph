@@ -5,6 +5,8 @@
 #include <unordered_set>
 #include <vector>
 #include <algorithm>
+#include <queue>
+#include <iostream>
 #include "Node.h"
 #include "Edge.h"
 
@@ -42,7 +44,7 @@ private:
 public:
     bool addNode(const T& v)
     {
-        if (getNode(v) == nullptr)
+        if (allNodes.find(v) == allNodes.end())
         {
             auto& node = allNodes.emplace(v, v).first->second;
             outEdges[v] = {};
@@ -76,21 +78,61 @@ public:
         return nodes;
     }
 
-    std::unordered_set<T> getNeighborNodes(const T& nodeValue) const
+    std::vector<T> getNextNodes(const T& nodeValue) const
     {
-        std::unordered_set<T> neighbors;
-        if (getNode(nodeValue) != nullptr)
+        auto it = outEdges.find(nodeValue);
+        if (it == outEdges.end()) return {};
+
+        std::vector<T> nextNodes;
+        for (const auto& edge : it->second)
         {
-            auto it = outEdges.find(nodeValue);
-            if (it != outEdges.end())
+            nextNodes.push_back(edge.getDestination()->getValue());
+        }
+        return nextNodes;
+    }
+
+    void bfsPrint(const T& start)
+    {
+        auto nodeValues = bfs(start);
+        std::cout << "BFS: start from " << start << std::endl << "\t";
+        for (const auto& value : nodeValues)
+        {
+            std::cout << value << ", ";
+        }
+        std::cout << "\nEND BFS" << std::endl;
+    }
+
+    std::vector<T> bfs(const T& start)
+    {
+        auto startNode = getNode(start);
+        if (startNode == nullptr)
+        {
+            return {};
+        }
+        std::unordered_set<Node<T>*> visited;
+        std::queue<Node<T>*> q;
+
+        q.push(startNode);
+        visited.insert(startNode);
+
+        std::vector<T> result;
+        while (!q.empty())
+        {
+            auto current = q.front();
+            q.pop();
+
+            for (auto neighborValue : getNextNodes(current->getValue()))
             {
-                for (const auto& edge : it->second)
+                auto neighbor = getNode(neighborValue);
+                if (neighbor && visited.find(neighbor) == visited.end())
                 {
-                    neighbors.insert(edge.getDestination()->getValue());
+                    q.push(neighbor);
+                    visited.insert(neighbor);
                 }
             }
+            result.push_back(current->getValue());
         }
-        return neighbors;
+        return result;
     }
 
     void dfs()
