@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <queue>
 #include <iostream>
+#include <limits>
 #include "Node.h"
 #include "Edge.h"
 
@@ -73,48 +73,72 @@ public:
         return nextNodes;
     }
 
-    void bfsPrint(const T& start)
+    std::unordered_map<T, std::unordered_map<T, L>> dumpToMatrixRepresentation()
     {
-        auto nodeValues = bfs(start);
-        std::cout << "BFS: start from " << start << std::endl << "\t";
-        for (const auto& value : nodeValues)
+        const L INF = std::numeric_limits<L>::max();
+        std::unordered_map<T, std::unordered_map<T, L>> dist;
+        for (const auto& [u, _] : allNodes)
         {
-            std::cout << value << ", ";
-        }
-        std::cout << "\nEND BFS" << std::endl;
-    }
-
-    std::vector<T> bfs(const T& start)
-    {
-        auto startNode = getNode(start);
-        if (startNode == nullptr)
-        {
-            return {};
-        }
-        std::unordered_set<Node<T>*> visited;
-        std::queue<Node<T>*> q;
-
-        q.push(startNode);
-        visited.insert(startNode);
-
-        std::vector<T> result;
-        while (!q.empty())
-        {
-            auto current = q.front();
-            q.pop();
-
-            for (auto neighborValue : getNextNodes(current->getValue()))
+            for (const auto& [v, _] : allNodes)
             {
-                auto neighbor = getNode(neighborValue);
-                if (neighbor && visited.find(neighbor) == visited.end())
+                if (u == v)
                 {
-                    q.push(neighbor);
-                    visited.insert(neighbor);
+                    dist[u][v] = 0;
+                }
+                else
+                {
+                    dist[u][v] = INF;
                 }
             }
-            result.push_back(current->getValue());
+
+            for (const auto& edge : outEdges[u])
+            {
+                dist[u][edge.getDestination()->getValue()] = edge.getLabel();
+            }
         }
-        return result;
+        return dist;
+    }
+
+    std::unordered_map<T, std::unordered_map<T, L>> floydWarshall()
+    {
+        std::unordered_map<T, std::unordered_map<T, L>> dist = dumpToMatrixRepresentation();
+
+        const L INF = std::numeric_limits<L>::max();
+        for (const auto& [k, _] : allNodes)
+        {
+            for (const auto& [i, _] : allNodes)
+            {
+                for (const auto& [j, _] : allNodes)
+                {
+                    if (dist[i][k] != INF && dist[k][j] != INF && dist[i][k] + dist[k][j] < dist[i][j])
+                    {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    void printFloydWarshall()
+    {
+        auto dist = floydWarshall();
+        const L INF = std::numeric_limits<L>::max();
+
+        std::cout << "Floyd-Warshall distance matrix:\n";
+        for (const auto& [i, row] : dist)
+        {
+            std::cout << i << ": ";
+            for (const auto& [j, d] : row)
+            {
+                if (d == INF)
+                    std::cout << j << "=INF ";
+                else
+                    std::cout << j << "=" << d << " ";
+            }
+            std::cout << "\n";
+        }
     }
 };
 
