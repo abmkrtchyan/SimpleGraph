@@ -154,13 +154,16 @@ public:
     }
 
 
-    std::vector<std::vector<T>> getShortestPaths(const T &nodeValue) {
+    std::vector<std::vector<T>> getShortestPaths(const T& nodeValue)
+    {
         dijkstra(nodeValue);
         std::vector<std::vector<T>> paths;
-        for(auto nodePair : allNodes) {
-            auto node = nodePair.second;
+        for (const auto& [v, _] : allNodes)
+        {
+            auto node = getNode(v);
             std::vector<T> current;
-            while (node != nullptr) {
+            while (node != nullptr)
+            {
                 current.push_back(node->getValue());
                 node = node->getParent();
             }

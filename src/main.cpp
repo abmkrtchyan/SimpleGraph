@@ -87,6 +87,7 @@ void test3() {
     graph.dijkstra("A");
     graph.printAllDijkstraNodes();
 
+    std::cout << std::endl << "ShortestPaths from A:" << std::endl;
     for (const auto& path: graph.getShortestPaths("A")) {
         for (const auto& node: path) {
             std::cout << node << " -> ";
