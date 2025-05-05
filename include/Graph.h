@@ -74,41 +74,81 @@ public:
     }
 
 
-    void dijkstra(const T &nodeValue) {
+    void dijkstra(const T& nodeValue)
+    {
         auto node = getNode(nodeValue);
-        if (node != nullptr) {
+        if (node != nullptr)
+        {
             dijkstra(node);
         }
     }
 
-    void initializeSingleSource(Node<T> *sourceNode) {
-        for (auto node: allNodes) {
-            node.second->setParent(nullptr);
-            node.second->setDistance(INT_MAX);
+    void initializeSingleSource(Node<T>* sourceNode)
+    {
+        for (auto node : allNodes)
+        {
+            node.second.setParent(nullptr);
+            node.second.setDistance(INT_MAX);
         }
         sourceNode->setDistance(0);
     }
 
-    void relax(Edge<T, L> &edge) {
-        if (edge.getDestination()->getDistance() > edge.getSource()->getDistance() + edge.getLabel()) {
+    bool relax(Edge<T, L>& edge)
+    {
+        if (edge.getDestination()->getDistance() > edge.getSource()->getDistance() + edge.getLabel())
+        {
             edge.getDestination()->setDistance(edge.getSource()->getDistance() + edge.getLabel());
             edge.getDestination()->setParent(edge.getSource());
+            return true;
+        }
+        return false;
+    }
+
+    void dijkstra(Node<T>* sourceNode)
+    {
+        initializeSingleSource(sourceNode);
+        auto cmp = [](Node<T>* a, Node<T>* b) { return a->getDistance() > b->getDistance(); };
+        std::priority_queue<Node<T>*, std::vector<Node<T>*>, decltype(cmp)> pq(cmp);
+        pq.push(sourceNode);
+        std::unordered_set<T> status;
+        while (!pq.empty())
+        {
+            auto node = pq.top();
+            pq.pop();
+            if (status.find(node->getValue()) == status.end())
+            {
+                status.insert(node->getValue());
+                for (auto edge : outEdges[node->getValue()])
+                {
+                    if (relax(edge))
+                    {
+                        pq.push(edge.getDestination());
+                    }
+                }
+            }
         }
     }
 
-    void dijkstra(Node<T> *sourceNode) {
-        initializeSingleSource(sourceNode);
-        std::priority_queue<Node<T> *, std::vector<Node<T> *>, std::greater<Node<T>*>> pq;
-        for (auto node: allNodes) {
-            pq.push(node.second);
+    void printAllDijkstraNodes() const
+    {
+        std::cout << "Node:\t ";
+        for (const auto& [_, node] : allNodes)
+        {
+            std::cout << "\t" << node.getValue();
         }
+        std::cout << std::endl;
 
-        while (!pq.empty()) {
-            auto node = pq.top();
-            pq.pop();
-            for (auto edge: out_edges[node]) {
-                relax(edge);
-            }
+        std::cout << "Distance: ";
+        for (const auto& [_, node] : allNodes)
+        {
+            std::cout << "\t" << node.getDistance();
+        }
+        std::cout << std::endl;
+
+        std::cout << "Parent: ";
+        for (const auto& [_, node] : allNodes)
+        {
+            std::cout << "\t" << (node.getParent() != nullptr ? node.getParent()->getValue() : "NULL");
         }
     }
 };

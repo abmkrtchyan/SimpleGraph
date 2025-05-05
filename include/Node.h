@@ -9,7 +9,7 @@ class Node
 {
     T value;
     int distance = INT_MAX;
-    Node<T> *parent = nullptr;
+    Node<T>* parent = nullptr;
 
 public:
     explicit Node(const T& val) : value(val)
@@ -25,30 +25,29 @@ public:
         return value;
     }
 
-    int getDistance() const {
+    int getDistance() const
+    {
         return this->distance;
     }
 
-    void setDistance(int newDistance) {
+    void setDistance(int newDistance)
+    {
         this->distance = newDistance;
     }
 
-    Node<T> *getParent() const {
+    Node<T>* getParent() const
+    {
         return this->parent;
     }
 
-    void setParent(Node<T> *newParent) {
+    void setParent(Node<T>* newParent)
+    {
         this->parent = newParent;
     }
 
-    bool operator==(const Node &other) const {
-        return value == other.value;
-    }
-
-    void print() const
+    bool operator==(const Node& other) const
     {
-        std::cout << "Node: " << getValue()
-                  << std::endl;
+        return value == other.value;
     }
 };
 

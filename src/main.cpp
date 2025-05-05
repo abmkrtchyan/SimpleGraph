@@ -85,4 +85,5 @@ void test3() {
 
     std::cout << "Graph:" << std::endl;
     graph.dijkstra("A");
+    graph.printAllDijkstraNodes();
 }
