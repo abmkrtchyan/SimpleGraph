@@ -1,60 +1,54 @@
 #ifndef SIMPLE_GRAPH_NODE_H
 #define SIMPLE_GRAPH_NODE_H
 
+#include <iostream>
 #include <climits>
 
-template<class T>
-class Node {
-private:
+template <class T>
+class Node
+{
     T value;
     int distance = INT_MAX;
-    Node<T> *parent = nullptr;
+    Node<T>* parent = nullptr;
 
 public:
-    Node(const T &val) : value(val) {}
+    explicit Node(const T& val) : value(val)
+    {
+    }
 
-    Node(const Node &other) : value(other.value) {}
+    Node(const Node& other) : value(other.value)
+    {
+    }
 
-    T getValue() const {
+    T getValue() const
+    {
         return value;
     }
 
-    int getDistance() const {
+    int getDistance() const
+    {
         return this->distance;
     }
 
-    void setDistance(int newDistance) {
+    void setDistance(int newDistance)
+    {
         this->distance = newDistance;
     }
 
-    Node<T> *getParent() const {
+    Node<T>* getParent() const
+    {
         return this->parent;
     }
 
-    void setParent(Node<T> *newParent) {
+    void setParent(Node<T>* newParent)
+    {
         this->parent = newParent;
     }
 
-    bool operator==(const Node &other) const {
+    bool operator==(const Node& other) const
+    {
         return value == other.value;
     }
-
-    void print() const {
-        std::cout << "Node: " << getValue()
-                  << std::endl;
-    }
-
-    struct HashFunction {
-        size_t operator()(const Node<T> &node) const {
-            return std::hash<T>()(node.getValue());
-        }
-    };
-
-    struct GreaterDistance {
-        bool operator()(const Node<T> &a, const Node<T> &b) const {
-            return a.getDistance() > b.getDistance();
-        }
-    };
 };
 
 #endif //SIMPLE_GRAPH_NODE_H
