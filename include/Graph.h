@@ -73,7 +73,7 @@ public:
         return nextNodes;
     }
 
-    std::unordered_map<T, std::unordered_map<T, L>> dumpToMatrixRepresentation()
+    std::unordered_map<T, std::unordered_map<T, L>> getInitMatrixForFloydWarshall()
     {
         const L INF = std::numeric_limits<L>::max();
         std::unordered_map<T, std::unordered_map<T, L>> dist;
@@ -101,9 +101,9 @@ public:
 
     std::unordered_map<T, std::unordered_map<T, L>> floydWarshall()
     {
-        std::unordered_map<T, std::unordered_map<T, L>> dist = dumpToMatrixRepresentation();
+        std::unordered_map<T, std::unordered_map<T, L>> dist = getInitMatrixForFloydWarshall();
 
-        const L INF = std::numeric_limits<L>::max();
+        const L INF = std::numeric_limits<L>::max(); // or const L INF = INT_MAX
         for (const auto& [k, _] : allNodes)
         {
             for (const auto& [i, _] : allNodes)
