@@ -26,12 +26,6 @@ public:
     {
         return value == other.value;
     }
-
-    void print() const
-    {
-        std::cout << "Node: " << getValue()
-                  << std::endl;
-    }
 };
 
 #endif //SIMPLE_GRAPH_NODE_H

@@ -38,7 +38,6 @@ void test2()
         }
         std::cout << "/" << std::endl;
     }
-    graph.bfsPrint("B");
 }
 
 void test1()
@@ -73,5 +72,4 @@ void test1()
         }
         std::cout << "/" << std::endl;
     }
-    graph.bfsPrint(1);
 }

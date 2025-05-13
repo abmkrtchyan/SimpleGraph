@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-#include <queue>
 #include <iostream>
 #include "Node.h"
 #include "Edge.h"
@@ -71,50 +70,6 @@ public:
             nextNodes.push_back(edge.getDestination()->getValue());
         }
         return nextNodes;
-    }
-
-    void bfsPrint(const T& start)
-    {
-        auto nodeValues = bfs(start);
-        std::cout << "BFS: start from " << start << std::endl << "\t";
-        for (const auto& value : nodeValues)
-        {
-            std::cout << value << ", ";
-        }
-        std::cout << "\nEND BFS" << std::endl;
-    }
-
-    std::vector<T> bfs(const T& start)
-    {
-        auto startNode = getNode(start);
-        if (startNode == nullptr)
-        {
-            return {};
-        }
-        std::unordered_set<Node<T>*> visited;
-        std::queue<Node<T>*> q;
-
-        q.push(startNode);
-        visited.insert(startNode);
-
-        std::vector<T> result;
-        while (!q.empty())
-        {
-            auto current = q.front();
-            q.pop();
-
-            for (auto neighborValue : getNextNodes(current->getValue()))
-            {
-                auto neighbor = getNode(neighborValue);
-                if (neighbor && visited.find(neighbor) == visited.end())
-                {
-                    q.push(neighbor);
-                    visited.insert(neighbor);
-                }
-            }
-            result.push_back(current->getValue());
-        }
-        return result;
     }
 };
 
