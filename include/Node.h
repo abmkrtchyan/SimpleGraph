@@ -40,6 +40,12 @@ public:
         return this->rank;
     }
 
+
+    void initRank()
+    {
+        this->rank = 0;
+    }
+
     void increaseRank()
     {
         ++this->rank;
