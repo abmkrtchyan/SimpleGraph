@@ -10,43 +10,37 @@
 #include "Node.h"
 #include "Edge.h"
 
-template <class T = char, class L = int>
-class Graph
-{
+template<class T = char, class L = int>
+class Graph {
 private:
-    std::unordered_map<T, Node<T>> allNodes;
-    std::unordered_map<T, std::unordered_set<Edge<T, L>>> inEdges;
-    std::unordered_map<T, std::unordered_set<Edge<T, L>>> outEdges;
+    std::unordered_map<T, Node<T> > allNodes;
+    std::unordered_map<T, std::unordered_set<Edge<T, L> > > inEdges;
+    std::unordered_map<T, std::unordered_set<Edge<T, L> > > outEdges;
 
-    Node<T>* getNode(const T& data)
-    {
+    Node<T> *getNode(const T &data) {
         auto it = allNodes.find(data);
         return (it != allNodes.end()) ? &(it->second) : nullptr;
     }
 
-    std::vector<Node<T>*> topologicalSortNodes()
-    {
+    std::vector<Node<T> *> topologicalSortByDfs() {
         dfs();
-        std::vector<Node<T>*> sortedNodes;
+        std::vector<Node<T> *> sortedNodes;
         sortedNodes.reserve(allNodes.size());
 
-        for (auto& [_, node] : allNodes)
-        {
+        for (auto &[_, node]: allNodes) {
             sortedNodes.push_back(&node);
         }
 
         std::sort(sortedNodes.begin(), sortedNodes.end(),
-                  [](Node<T>* a, Node<T>* b) { return a->getFinish() > b->getFinish(); });
+                  [](Node<T> *a, Node<T> *b) { return a->getFinish() > b->getFinish(); });
 
         return sortedNodes;
     }
 
 public:
-    bool addNode(const T& v)
-    {
-        if (allNodes.find(v) == allNodes.end())
-        {
-            auto& node = allNodes.emplace(v, v).first->second;
+    bool addNode(const T &v) {
+        if (allNodes.find(v) == allNodes.end()) {
+            auto &node = allNodes.emplace(v, v).first->second;
             outEdges[v] = {};
             inEdges[v] = {};
             return true;
@@ -54,12 +48,10 @@ public:
         return false;
     }
 
-    bool addEdge(const T& source, const T& dest, const L& label)
-    {
+    bool addEdge(const T &source, const T &dest, const L &label) {
         auto sourceNode = getNode(source);
         auto destNode = getNode(dest);
-        if (sourceNode != nullptr && destNode != nullptr)
-        {
+        if (sourceNode != nullptr && destNode != nullptr) {
             Edge<T, L> edge(sourceNode, destNode, label);
             inEdges[dest].insert(edge);
             outEdges[source].insert(edge);
@@ -68,64 +60,53 @@ public:
         throw std::runtime_error("Node not found!");
     }
 
-    std::unordered_set<T> getAllNodes() const
-    {
+    std::unordered_set<T> getAllNodes() const {
         std::unordered_set<T> nodes;
-        for (const auto& [key, _] : allNodes)
-        {
+        for (const auto &[key, _]: allNodes) {
             nodes.insert(key);
         }
         return nodes;
     }
 
-    std::vector<T> getNextNodes(const T& nodeValue) const
-    {
+    std::vector<T> getNextNodes(const T &nodeValue) const {
         auto it = outEdges.find(nodeValue);
         if (it == outEdges.end()) return {};
 
         std::vector<T> nextNodes;
-        for (const auto& edge : it->second)
-        {
+        for (const auto &edge: it->second) {
             nextNodes.push_back(edge.getDestination()->getValue());
         }
         return nextNodes;
     }
 
-    void bfsPrint(const T& start)
-    {
+    void bfsPrint(const T &start) {
         auto nodeValues = bfs(start);
         std::cout << "BFS: start from " << start << std::endl << "\t";
-        for (const auto& value : nodeValues)
-        {
+        for (const auto &value: nodeValues) {
             std::cout << value << ", ";
         }
         std::cout << "\nEND BFS" << std::endl;
     }
 
-    std::vector<T> bfs(const T& start)
-    {
+    std::vector<T> bfs(const T &start) {
         auto startNode = getNode(start);
-        if (startNode == nullptr)
-        {
+        if (startNode == nullptr) {
             return {};
         }
-        std::unordered_set<Node<T>*> visited;
-        std::queue<Node<T>*> q;
+        std::unordered_set<Node<T> *> visited;
+        std::queue<Node<T> *> q;
 
         q.push(startNode);
         visited.insert(startNode);
 
         std::vector<T> result;
-        while (!q.empty())
-        {
+        while (!q.empty()) {
             auto current = q.front();
             q.pop();
 
-            for (auto neighborValue : getNextNodes(current->getValue()))
-            {
+            for (auto neighborValue: getNextNodes(current->getValue())) {
                 auto neighbor = getNode(neighborValue);
-                if (neighbor && visited.find(neighbor) == visited.end())
-                {
+                if (neighbor && visited.find(neighbor) == visited.end()) {
                     q.push(neighbor);
                     visited.insert(neighbor);
                 }
@@ -135,31 +116,24 @@ public:
         return result;
     }
 
-    void dfs()
-    {
-        for (auto& [_, node] : allNodes)
-        {
+    void dfs() {
+        for (auto &[_, node]: allNodes) {
             node.reset();
         }
         std::size_t time = 0;
-        for (auto& [_, node] : allNodes)
-        {
-            if (node.getColor() == WHITE)
-            {
+        for (auto &[_, node]: allNodes) {
+            if (node.getColor() == WHITE) {
                 dfsVisit(node, time);
             }
         }
     }
 
-    void dfsVisit(Node<T>& node, std::size_t& time)
-    {
+    void dfsVisit(Node<T> &node, std::size_t &time) {
         node.setStart(time++);
         node.setColor(GREY);
-        for (const auto& edge : outEdges[node.getValue()])
-        {
+        for (const auto &edge: outEdges[node.getValue()]) {
             auto nextNode = edge.getDestination();
-            if (nextNode->getColor() == WHITE)
-            {
+            if (nextNode->getColor() == WHITE) {
                 dfsVisit(*nextNode, time);
             }
         }
@@ -167,15 +141,41 @@ public:
         node.setFinish(time++);
     }
 
-    std::vector<T> topologicalSort()
-    {
+    std::vector<T> topologicalSort() {
         std::vector<T> sortedValues;
         sortedValues.reserve(allNodes.size());
-        for (auto* node : topologicalSortNodes())
-        {
+        for (auto *node: topologicalSortByDfs()) {
             sortedValues.push_back(node->getValue());
         }
         return sortedValues;
+    }
+
+    std::vector<T> topologicalSortByKahnsAlgorithm() {
+        std::vector<T> sortedNodes;
+        sortedNodes.reserve(allNodes.size());
+        std::unordered_map<T, std::size_t> inCount;
+        std::queue<T> queue;
+        for (const auto &[node, edges]: inEdges) {
+            inCount[node] = edges.size();
+            if (edges.size() == 0) {
+                queue.push(node);
+            }
+        }
+        while (!queue.empty()) {
+            auto node = queue.front();
+            queue.pop();
+            sortedNodes.push_back(node);
+            for (auto nextNode: getNextNodes(node)) {
+                --inCount[nextNode];
+                if (inCount[nextNode] == 0) {
+                    queue.push(nextNode);
+                }
+            }
+        }
+        if (sortedNodes.size() < allNodes.size()) {
+            throw std::runtime_error("not a DAG");
+        }
+        return sortedNodes;
     }
 };
 

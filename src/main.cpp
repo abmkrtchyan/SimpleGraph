@@ -5,8 +5,7 @@ void test1();
 
 void test2();
 
-int main()
-{
+int main() {
     test1();
 
     test2();
@@ -14,8 +13,7 @@ int main()
     return 0;
 }
 
-void test2()
-{
+void test2() {
     Graph<std::string> graph;
     graph.addNode("A");
     graph.addNode("B");
@@ -29,26 +27,27 @@ void test2()
     graph.addEdge("A", "E", 1);
 
     std::cout << "Graph:" << std::endl;
-    for (const auto& node : graph.getAllNodes())
-    {
+    for (const auto &node: graph.getAllNodes()) {
         std::cout << "\t" << node << " -> ";
-        for (const auto& next : graph.getNextNodes(node))
-        {
+        for (const auto &next: graph.getNextNodes(node)) {
             std::cout << next << ", ";
         }
         std::cout << "/" << std::endl;
     }
 
-    auto nodes = graph.topologicalSort();
-    std::cout << "Sorted Nodes: ";
-    for (const auto &node: nodes) {
+    std::cout << "Sorted Nodes by DFS: ";
+    for (const auto &node: graph.topologicalSort()) {
+        std::cout << node << ", ";
+    }
+
+    std::cout << "\nSorted Nodes by Kahn: ";
+    for (const auto &node: graph.topologicalSortByKahnsAlgorithm()) {
         std::cout << node << ", ";
     }
     std::cout << std::endl << "___________TOPOLOGICAL_SORT_FINISH____________" << std::endl;
 }
 
-void test1()
-{
+void test1() {
     Graph<int, int> graph;
 
     graph.addNode(1);
@@ -70,19 +69,21 @@ void test1()
     graph.addEdge(11, 1, 1);
 
     std::cout << "Graph:" << std::endl;
-    for (const auto& node : graph.getAllNodes())
-    {
+    for (const auto &node: graph.getAllNodes()) {
         std::cout << "\t" << node << " -> ";
-        for (const auto& next : graph.getNextNodes(node))
-        {
+        for (const auto &next: graph.getNextNodes(node)) {
             std::cout << next << ", ";
         }
         std::cout << "/" << std::endl;
     }
 
-    auto nodes = graph.topologicalSort();
-    std::cout << "Sorted Nodes: ";
-    for (const auto &node: nodes) {
+    std::cout << "Sorted Nodes by DFS: ";
+    for (const auto &node: graph.topologicalSort()) {
+        std::cout << node << ", ";
+    }
+
+    std::cout << "\nSorted Nodes by Kahn: ";
+    for (const auto &node: graph.topologicalSortByKahnsAlgorithm()) {
         std::cout << node << ", ";
     }
     std::cout << std::endl << "___________TOPOLOGICAL_SORT_FINISH____________" << std::endl;
